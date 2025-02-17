@@ -1,0 +1,48 @@
+name: quickfix-project
+
+services:
+  quickfix-server:
+    image: localhost/quickfix-project-server
+    build: .
+    container_name: quickfix-project-server
+    networks:
+      - fix_network
+    volumes:
+      - ./acceptor.cfg:/quickfix-project/config/acceptor.cfg
+      - ./FIX44.xml:/quickfix-project/config/FIX44.xml
+      - ./log:/quickfix-project/log
+      - ./store:/quickfix-project/store
+    ports:
+      - "5001:5001"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    command: >
+      sh -c "cd /quickfix-project && nohup /usr/local/bin/executor config/acceptor.cfg > log/executor.log 2>&1 & exec tail -f log/executor.log"
+
+  quickfix-client:
+    image: localhost/quickfix-project-client
+    build: .
+    container_name: quickfix-project-client
+    depends_on:
+      - quickfix-server
+    networks:
+      - fix_network
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - ./initiator.cfg:/quickfix-project/config/initiator.cfg
+      - ./FIX44.xml:/quickfix-project/config/FIX44.xml
+      - ./log:/quickfix-project/log
+      - ./store:/quickfix-project/store
+    # command: >
+    #  sh -c "cd /quickfix-project && nohup /usr/local/bin/tradeclient config/initiator.cfg > log/tradeclient.log 2>&1 & exec tail -f log/executor.log"
+
+    #sh -c "nohup /usr/local/bin/tradeclient /quickfix-project/config/initiator.cfg > /quickfix-project/log/tradeclient.log 2>&1 & exec tail -f /quickfix-project/log/tradeclient.log"
+
+
+
+networks:
+  fix_network:
+    driver: bridge
