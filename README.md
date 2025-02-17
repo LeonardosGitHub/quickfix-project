@@ -5,9 +5,9 @@
 2) Quickfix Server - quickfix-project-server
 
 
-#### BUILDING AND INSTALLING
+    #### BUILDING AND INSTALLING
 
-- podman compose build
-- podman compose up
-- podman exec -it quickfix-project-client bash
-    - /usr/local/bin/tradeclient /quickfix-project/config/initiator.cfg
+    - podman compose build
+    - podman compose up
+    - podman exec -it quickfix-project-client bash
+        - /usr/local/bin/tradeclient /quickfix-project/config/initiator.cfg
