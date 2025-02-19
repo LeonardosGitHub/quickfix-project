@@ -8,6 +8,6 @@
     #### BUILDING AND INSTALLING
 
     - podman compose build
-    - podman compose up
+    - podman compose up -d
     - podman exec -it quickfix-project-client bash
         - /usr/local/bin/tradeclient /quickfix-project/config/initiator.cfg
